@@ -1,0 +1,34 @@
+import random
+
+def solve_nqueens(n, s):
+    def conflicts(s):
+
+        return sum(
+            s[i] == s[j] or abs(s[i] - s[j]) == abs(i - j)
+            for i in range(n)
+            for j in range(i + 1, n)
+        )   
+    
+    while (c := conflicts(s)) > 0:
+        neighbors = []
+        for i in range(n):
+            for j in range(i + 1, n):
+                ns = list(s)
+                ns[i], ns[j] = ns[j], ns[i]
+                neighbors.append((conflicts(ns), ns))        
+        best_c, best_s = min(neighbors, key=lambda x: x[0])
+        if best_c >= c:
+            s = list(s)
+            random.shuffle(s)
+        else:
+            s = best_s
+    return s
+
+if __name__ == "__main__":
+    n = int(input('Enter n: '))
+    print("Enter queen positions:")
+    s = []
+    for i in range(n):
+        s.append(int(input()))
+        
+    print(f'Final : {solve_nqueens(n,s)}')
